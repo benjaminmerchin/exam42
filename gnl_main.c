@@ -16,6 +16,7 @@ int main(int ac, char **av)
     while ((retour = get_next_line(&line)) == 1)
     {
         printf("%s\n", line);
+//        write(1, "ok\n", 3);
         free(line);
     }
     if (line[0] != 0)
