@@ -79,12 +79,12 @@ void putnbrint(int nb, t_struct *data)
 
 void putnbrhex(unsigned int nb, t_struct *data)
 {
-    char *base = "0123456789ABCDEF";
+    char *base = "0123456789abcdef";
     
     if (nb < 0)
         nb = - nb;
     if (nb >= 16)
-        putnbrint(nb / 16, data);
+        putnbrhex(nb / 16, data);
     ft_putchar(data, base[nb % 16]);
 }
 
@@ -101,13 +101,49 @@ int ft_atoi(t_struct *data)
     return (result);
 }
 
+void printspaces(t_struct *data, int nb)
+{
+	int i;
+
+	i = 0;
+	while (i < nb)
+	{
+		ft_putchar(data, ' ');
+		i++;
+	}
+}
+
+void printzero(t_struct *data, int nb)
+{
+	int i;
+
+	i = 0;
+	while (i < nb)
+	{
+		ft_putchar(data, '0');
+		i++;
+	}
+}
+
+
 void hq_int(t_struct *data)
 {
     int i;
+	int spaces;
     
     i = 0;
     data->d = va_arg(data->args, int);
-    data->len = len_int(i);
+    data->len = len_int(data->d);
+	if (data->d < 0)
+		data->len = data->len + 1;
+	spaces = data->width - data->prec;
+	printspaces(data, spaces);
+	if (data->d < 0)
+	{
+		ft_putchar(data, '-');
+		data->d = - data->d;
+	}
+	printzero(data, data->prec - data->len);
     putnbrint(data->d, data);
 }
 
@@ -117,7 +153,10 @@ void hq_hex(t_struct *data)
     
     i = 0;
     data->x = va_arg(data->args, unsigned int);
-    data->len = len_hex(i);
+    data->len = len_hex(data->x);
+	data->width = data->width - data->len;
+	printspaces(data, data->width - (data->prec - data->len) - data->len);
+	printzero(data, data->prec - data->len);
     putnbrhex(data->x, data);
 }
 
@@ -152,8 +191,6 @@ void parsor(t_struct *data)
         hq_str(data);
     if (data->str[data->i] == 'x')
         hq_hex(data);
-/*    printf("width %d \n", data->width);
-    printf("prec %d \n", data->prec);*/
 }
 
 int ft_printf(const char *str, ... )
@@ -178,6 +215,9 @@ int ft_printf(const char *str, ... )
 
 int main(void)
 {
-    ft_printf("%123.1234dsas", 1);
+    char *str = "%8.-4d\n";
+    int a = -421;
+    ft_printf(str, a, 1);
+	printf(str, a, 1);
     return (0);
 }

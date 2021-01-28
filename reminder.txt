@@ -25,3 +25,9 @@ data.str = (char *)str; // cast la chaine dans la struct
 va_start(data.arg, str); // data.arg de type va_list
 va_arg(data->arg, type); // pour lire le type
 va_end(str); // a la fin
+
+si le str est null on le remplace par (null)
+en cas de width ou prec negative, essayer de ne pas crash, et les gerer comme des positives.
+/!\ il y faut bien gerer gerer la precision pour tous les flag, meme str.
+
+=> pour m'entrainer pour la semaine prochaine : juste faire les 3 fonctions de ft_printf qui gerent les flag. + GNL d'exam en entier.
