@@ -38,11 +38,11 @@ int get_next_line(char **line)
     char buff[2];
     int ret;
 
-    buff[1] = '\0';
+    buff[1] = 0;
     *line = (char *)malloc(sizeof(char));
     if (!*line)
         return (-1);
-    *line[0] = '\0';
+    *line[0] = 0;
     while ((ret = read(0, buff, 1)) == 1)
     {
         if (buff[0] == '\n')
