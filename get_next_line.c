@@ -1,6 +1,20 @@
 #include "get_next_line.h"
 
-int ft_strlen(char *str)
+//New Version:
+
+int	gnl(int fd, char **line)
+{
+	int ret = 0, i = 0, buf = 0;
+	line = malloc(400000);
+	while  ((ret = read(fd, (char )&buf, 1)) == 1 && buf != '\n')
+		(line)[i++] = buf;
+	(line)[i] = '\0';
+	return (ret);
+}
+
+//Old Version:
+
+/*int ft_strlen(char *str)
 {
     int i;
 
@@ -63,4 +77,4 @@ int get_next_line(char **line)
         return (-1);
     }
     return (1);
-}
+}*/
