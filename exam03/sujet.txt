@@ -9,7 +9,7 @@ Ecrire un programme qui aura ressemblera à un executeur de commande shell
 - Votre programme doit implementer "|" et ";" comme dans bash
 	- Nous n'essaierons jamais un "|" immédiatement suivi ou précédé par rien ou un autre "|" ou un ";"
 - Votre programme doit implementer la commande "built-in" cd et seulement avec un chemin en argument (pas de '-' ou sans argument)
-	- si cd n'a pas le bon nombre d'argument votre programme devra afficher dans STDERR "error: NU" suivi d'un '\n'
+	- si cd n'a pas le bon nombre d'argument votre programme devra afficher dans STDERR "error: cd: bad arguments" suivi d'un '\n'
 	- si cd a echoué votre programme devra afficher dans STDERR "error: cd: cannot change directory to path_to_change" suivi d'un '\n' avec path_to_change remplacer par l'argument à cd
 	- une commande cd ne sera jamais immédiatement précédée ou suivie par un "|"
 - Votre programme n'a pas à gerer les "wildcards" (*, ~ etc...)
