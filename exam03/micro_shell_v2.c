@@ -21,7 +21,7 @@ void putstr_ft(char *str, int fd) {
 	int i = 0;
 
 	while (str && str[i]) {
-		write(2, &str[i], 1);
+		write(fd, &str[i], 1);
 		i++;
 	}
 }
@@ -57,9 +57,9 @@ int execution(t_a *a) {
 		waitpid(pid, 0, 0);
 		if (a->type_backup == PIPE)
 			close(a->pipe_backup);
-		if (a->type_backup && !a->type)
+		if (a->type_backup == PIPE && a->type != PIPE)
 			close(a->pipe_fd[0]);
-		if (a->type)
+		if (a->type == PIPE)
 			close(a->pipe_fd[1]);
 	}
 	return 0;
