@@ -38,7 +38,7 @@ int execution(t_a *a) {
 	pid_t pid;
 
 	if (a->type == PIPE)
-		if (pipe(a->pipe_fd) == -1)
+		if (pipe(a->pipe_fd) < 0)
 			return (error_int("fatal", NULL));
 	pid = fork();
 	if (pid < 0)
