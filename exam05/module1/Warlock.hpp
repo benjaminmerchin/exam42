@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
+#include <map>
 #include "ASpell.hpp"
 #include "ATarget.hpp"
 
@@ -9,29 +9,32 @@ class Warlock {
 private:
 	std::string _name;
 	std::string _title;
-	std::vector<ASpell *> _array;
+	std::map<std::string, ASpell *> arr_spell;
 public:
 	Warlock(std::string const &name, std::string const &title) : _name(name), _title(title) {std::cout << _name << ": This looks like another boring day.\n";}
 	~Warlock() {
-		for (std::vector<ASpell *>::iterator it = _array.begin(); it != _array.end(); it++)
-			delete *it;
+		for (std::map<std::string, ASpell *>::iterator it = arr_spell.begin(); it != arr_spell.end(); it++)
+			delete it->second;
+		arr_spell.clear();
 		std::cout << _name << ": My job here is done!\n";
 	}
 	std::string const &getName() const {return _name;}
 	std::string const &getTitle() const {return _title;}
 	void setTitle(std::string const &title) {_title = title;}
 	void introduce() const {std::cout << _name << ": I am " << _name << ", " << _title << "!\n";}
-	void learnSpell(ASpell *src) {_array.push_back(src);}
-	void forgetSpell(std::string const &spell_name) {
-		for (std::vector<ASpell *>::iterator it = _array.begin(); it != _array.end(); it++)
-			if ((*it)->getName() == spell_name) {
-				delete *it; _array.erase(it); return;
-			}
+	void learnSpell(ASpell* spell_ptr) {
+		if (spell_ptr)
+			arr_spell.insert(std::pair<std::string, ASpell *>(spell_ptr->getName(), spell_ptr->clone()));
+	}
+	void forgetSpell(std::string const & spell_name) {
+		std::map<std::string, ASpell *>::iterator it = arr_spell.find(spell_name);
+		if (it != arr_spell.end())
+			delete it->second;
+		arr_spell.erase(spell_name);
 	}
 	void launchSpell(std::string const &spell_name, ATarget const &ref) {
-		for (std::vector<ASpell *>::iterator it = _array.begin(); it != _array.end(); it++)
-			if ((*it)->getName() == spell_name) {
-				(*it)->launch(ref); return;
-			}
+		ASpell* temp = arr_spell[spell_name];
+		if (temp)
+			temp->launch(ref);
 	}
 };
