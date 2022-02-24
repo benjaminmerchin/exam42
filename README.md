@@ -12,7 +12,7 @@ Subjects can be foubd [there](https://github.com/markveligod/examrank-02-03-04-0
 
 <b>Exam Rank 06 of the common core :</b>TODO<br>For the client, we can just use the command Netcat:
 ```
-nc 127.0.0.1 8081     (case with server port 8081)
+nc -l 1024     (case with server port 1024)
 ```
 and save the time required to code a client.
 
