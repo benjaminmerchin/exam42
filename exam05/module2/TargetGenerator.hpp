@@ -6,35 +6,34 @@
 
 class TargetGenerator {
 private:
-	std::map<std::string, ATarget *> arr_target;
+	std::map<std::string, ATarget *> _array;
 	TargetGenerator(TargetGenerator const &src) {*this = src;}
 	TargetGenerator &operator=(TargetGenerator const &src) {(void)src; return *this;}
 public:
 	TargetGenerator() {}
 	~TargetGenerator() {
-		std::map<std::string, ATarget *>::iterator it_begin = arr_target.begin();
-		std::map<std::string, ATarget *>::iterator it_end = arr_target.end();
-		while (it_begin != it_end)
+		std::map<std::string, ATarget *>::iterator it = _array.begin();
+		while (it != _array.end())
 		{
-			delete it_begin->second;
-			it_begin++;
+			delete it->second;
+			it++;
 		}
-		arr_target.clear();
+		_array.clear();
 	}
 	void learnTargetType(ATarget* target_ptr) {
 		if (target_ptr)
-			arr_target.insert(std::pair<std::string, ATarget *>(target_ptr->getType(), target_ptr->clone()));
+			_array.insert(std::pair<std::string, ATarget *>(target_ptr->getType(), target_ptr->clone()));
 	}
 	void forgetTargetType(std::string const & target_name) {
-		std::map<std::string, ATarget *>::iterator it = arr_target.find(target_name);
-		if (it != arr_target.end())
+		std::map<std::string, ATarget *>::iterator it = _array.find(target_name);
+		if (it != _array.end())
 			delete it->second;
-		arr_target.erase(target_name);
+		_array.erase(target_name);
 	}
 	ATarget* createTarget(std::string const & target_name) {
-		std::map<std::string, ATarget *>::iterator it = arr_target.find(target_name);
-		if (it != arr_target.end())
-			return arr_target[target_name];
+		std::map<std::string, ATarget *>::iterator it = _array.find(target_name);
+		if (it != _array.end())
+			return _array[target_name];
 		return NULL;
 	}
 };
