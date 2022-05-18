@@ -10,11 +10,13 @@ Subjects can be foubd [there](https://github.com/markveligod/examrank-02-03-04-0
 
 <b>Exam Rank 05 of the common core :</b><br>There are three exercises<br>With my solution, you can avoid to use the .cpp and code almost everything in the .hpp, except for 2 functions, so it is way quicker.<br>You can basically copy paste most of the code most of the fime. Especially for the last exercise.<br>I used %s/textBefore/textAfter/g in vim to replace text.<br>Also don't forget the const! I counted them to make sure I had the correct number and it went smooth. Good luck :)
 
-<b>Exam Rank 06 of the common core :</b>TODO<br>For the client, we can just use the command Netcat:
+<b>Exam Rank 06 of the common core :</b><br>For the client, we can just use the command Netcat:
+We can open 3 Terminal, in one we run the mini_serv, and in the other two we use nc to send messages between clients.
 ```
-nc -l 1024     (case with server port 1024)
+nc 127.0.0.1 1024     (case with server port 1024)
 ```
-and save the time required to code a client.
+This is [nabentay's version on GitLab](https://git.nabentay.fr/nabentay/me.gi/-/blob/master/mini_serv.c)<br>
+The best version that I found, basically you only need to code 50 lines since out of the 150 lines, 100 are already given in the subject.
 
 <!--
 -->
