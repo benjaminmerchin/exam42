@@ -1,21 +1,21 @@
+#include <errno.h>
 #include <string.h>
-#include <stdio.h>
 #include <unistd.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <stdlib.h>
-#include <sys/select.h>
-#include <fcntl.h>
 
-int	sockfd, clientfd, max_fd;
-socklen_t	len;
+int sockfd, connfd, max_fd;
+struct sockaddr_in servaddr, cli;
 fd_set _fds, _fds_read, _fds_write;
-struct sockaddr_in	srvaddr, cli;
+socklen_t len;
 int client = 0;
 int _usr[65000];
-char	*_msg[65000];
-char	buff[1025];
-char	send_info[50];
+char *_msg[65000];
+char buff[1025];
+char send_info[50];
 
 int extract_message(char **buf, char **msg)
 {
@@ -64,38 +64,37 @@ char *str_join(char *buf, char *add)
 	return (newbuf);
 }
 
-void	send_all(int from, char *str)
+void send_all(int temp, char *str)
 {
 	for (int fd = 0; fd <= max_fd; fd++)
-	{
-		if (FD_ISSET(fd, &_fds_write) && fd != from)
+		if (FD_ISSET(fd, &_fds_write) && fd != temp)
 			send(fd, str, strlen(str), 0);
-	}
 }
 
-void	fatal()
+void fatal()
 {
 	write(2, "Fatal error\n", strlen("Fatal error\n"));
 	exit(1);
 }
 
-int	main(int ac, char **av)
-{
+int main(int ac, char **av) {
 	if (ac != 2)
 	{
 		write(2, "Wrong number of arguments\n", strlen("Wrong number of arguments\n"));
-		exit (1);
+		exit(1);
 	}
+
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 		fatal();
-	bzero(&srvaddr, sizeof(srvaddr));
-	srvaddr.sin_family = AF_INET;
-	srvaddr.sin_addr.s_addr = htonl(2130706433);
-	srvaddr.sin_port = htons(atoi(av[1]));
+	bzero(&servaddr, sizeof(servaddr)); 
 
-	if ((bind(sockfd, (const struct sockaddr *)&srvaddr, sizeof(srvaddr))) != 0)
+	servaddr.sin_family = AF_INET; 
+	servaddr.sin_addr.s_addr = htonl(2130706433); //127.0.0.1
+	servaddr.sin_port = htons(atoi(av[1])); 
+
+	if ((bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr))) != 0)
 		fatal();
-	if (listen(sockfd, 1024) != 0)
+	if (listen(sockfd, 10) != 0)
 		fatal();
 	FD_ZERO(&_fds);
 	FD_SET(sockfd, &_fds);
@@ -104,7 +103,7 @@ int	main(int ac, char **av)
 	for (;;)
 	{
 		_fds_read = _fds_write = _fds;
-
+		
 		if (select(max_fd + 1, &_fds_read, &_fds_write, 0, 0) < 0)
 			fatal();
 		for (int fd = 0; fd <= max_fd; fd++)
@@ -114,16 +113,16 @@ int	main(int ac, char **av)
 			if (fd == sockfd)
 			{
 				len = sizeof(cli);
-				if ((clientfd = accept(sockfd, (struct sockaddr *)&cli, &len)) < 0)
+				if ((connfd = accept(sockfd, (struct sockaddr *)&cli, &len)) < 0)
 					fatal();
-				if (max_fd < clientfd)
-					max_fd = clientfd;
-				_usr[clientfd] = client;
+				if (max_fd < connfd)
+					max_fd = connfd;
+				_usr[connfd] = client;
 				client++;
-				_msg[clientfd] = NULL;
-				sprintf(send_info, "server: client %d just arrived\n", _usr[clientfd]);
-				send_all(clientfd, send_info);
-				FD_SET(clientfd, &_fds);
+				_msg[connfd] = NULL;
+				sprintf(send_info, "server: client %d just arrived\n", _usr[connfd]);
+				send_all(connfd, send_info);
+				FD_SET(connfd, &_fds);
 				break ;
 			}
 			else
@@ -139,7 +138,7 @@ int	main(int ac, char **av)
 					FD_CLR(fd, &_fds);
 					break ;
 				}
-				buff[ret] = '\0';
+				buff[1024] = '\0';
 				_msg[fd] = str_join(_msg[fd], buff);
 				for (char *msg = NULL; extract_message(&_msg[fd], &msg);)
 				{
