@@ -17,7 +17,7 @@ nc 127.0.0.1 1024     (case with server port 1024)
 ```
 This is [nabentay's version on GitLab](https://git.nabentay.fr/nabentay/me.gi/-/blob/master/mini_serv.c)<br>
 The best version that I found, basically you only need to code 50 lines since out of the 150 lines, 100 are already given in the subject.<br>
-In the exam, the testing on the subject can fail randomly. On my exam, I pushed 3 times exactly the same code (I had starange errors on the last test (test9), on the second test, I had only one line that should not be there out of 7000), and I validated on the 3rd try. Because the moulinette launch more than 2000 clients on the same server, I suspect it was one fd badly closed on the computer used for moulinette.
+In the exam, the testing on the subject can fail randomly. On my exam, I pushed 3 times exactly the same code. I had strange errors on the last moulinette test (test9, the longest). On the second push, I had only one extra line that should not be there out of more than 13000 lines in the trace), and I validated on the 3rd try with the exact same code. Because the moulinette launch more than 2000 clients on the same server, I suspect it was one fd badly closed on the computer used for moulinette.
 
 <!--
 -->
