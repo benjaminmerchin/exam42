@@ -138,7 +138,7 @@ int main(int ac, char **av) {
 					FD_CLR(fd, &_fds);
 					break ;
 				}
-				buff[1024] = '\0';
+				buff[ret] = '\0';
 				_msg[fd] = str_join(_msg[fd], buff);
 				for (char *msg = NULL; extract_message(&_msg[fd], &msg);)
 				{
